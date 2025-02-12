@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt-to-Image Converter</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    /* Header and Menu */
+    header {
+      background: #6200ea;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Main Content */
+    main {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    textarea {
+      width: 80%;
+      height: 100px;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #6200ea;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #6200ea;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #3700b3;
+    }
+
+    #output {
+      margin-top: 20px;
+    }
+
+    #output img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Footer */
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Prompt-to-Image Converter</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <textarea id="promptInput" placeholder="Enter your prompt here..."></textarea>
+    <br>
+    <button onclick="generateImage()">Generate Image</button>
+    <div id="output"></div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Prompt-to-Image Converter. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Replace with your Hugging Face API token
+    const HF_API_TOKEN = "YOUR_HUGGING_FACE_TOKEN";
+    const MODEL_NAME = "stabilityai/stable-diffusion-2"; // Example model
+
+    async function generateImage() {
+      const prompt = document.getElementById("promptInput").value;
+      const outputDiv = document.getElementById("output");
+
+      if (!prompt) {
+        alert("Please enter a prompt!");
+        return;
+      }
+
+      outputDiv.innerHTML = "<p>Generating image... Please wait.</p>";
+
+      try {
+        const response = await fetch(
+          `https://api-inference.huggingface.co/models/${MODEL_NAME}`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${HF_API_TOKEN}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ inputs: prompt }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to generate image.");
+        }
+
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        outputDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Image">`;
+      } catch (error) {
+        console.error(error);
+        outputDiv.innerHTML = "<p>Error generating image. Please try again.</p>";
+      }
+    }
+  </script>
+</body>
+</html>
