@@ -12,6 +12,9 @@
       padding: 0;
       background-color: #f4f4f9;
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Header and Menu */
@@ -42,6 +45,7 @@
 
     /* Main Content */
     main {
+      flex: 1;
       padding: 2rem;
       text-align: center;
     }
@@ -124,8 +128,6 @@
       color: white;
       text-align: center;
       padding: 1rem;
-      position: fixed;
-      bottom: 0;
       width: 100%;
     }
   </style>
@@ -143,6 +145,7 @@
   <main>
     <textarea id="promptInput" placeholder="Enter your prompt here..."></textarea>
     <br>
+    <label for="modelSelect">Select Model:</label>
     <select id="modelSelect">
       <option value="stabilityai/stable-diffusion-2">Stable Diffusion 2</option>
       <option value="runwayml/stable-diffusion-v1-5">Stable Diffusion v1.5</option>
@@ -162,7 +165,7 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 Prompt-to-Image Converter. All rights reserved.</p>
+    <p>&copy; 2025 𝐖𝐎𝐎𝐃𝐜𝐫𝐚𝐟𝐭. All rights reserved.</p>
   </footer>
 
   <script>
